@@ -1,3 +1,5 @@
+import utils.RedisConnectionUtils;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -14,7 +16,8 @@ public class Main {
           serverSocket = new ServerSocket(port);
           serverSocket.setReuseAddress(true);
           clientSocket = serverSocket.accept();
-          clientSocket.getOutputStream().write("+PONG\r\n".getBytes());
+          RedisConnectionUtils connectionUtils = new RedisConnectionUtils(clientSocket);
+          connectionUtils.handleConnectionRequest();
 
         } catch (IOException e) {
 
@@ -22,8 +25,8 @@ public class Main {
 
         } finally {
           try {
-            if (clientSocket != null) {
-              clientSocket.close();
+            if (serverSocket != null) {
+              serverSocket.close();
             }
           } catch (IOException e) {
             System.out.println("IOException: " + e.getMessage());
