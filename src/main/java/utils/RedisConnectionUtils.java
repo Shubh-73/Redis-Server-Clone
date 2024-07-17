@@ -23,11 +23,9 @@ public class RedisConnectionUtils {
             String line;
 
             while((line = reader.readLine()) != null){
-                if("PING".equalsIgnoreCase(line.trim())){
+                System.out.println(line);
+                if(line.equals("ping".equalsIgnoreCase(line))){
                     outputSteam.write("+PONG\r\n".getBytes());
-                }
-                else{
-                    outputSteam.write("--err unknown command\r\n".getBytes());
                     outputSteam.flush();
                 }
             }
