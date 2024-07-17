@@ -20,7 +20,16 @@ public class Main {
           //for single command
           //clientSocket.getOutputStream().write("+PONG\r\n".getBytes(StandardCharsets.UTF_8));
           RedisConnectionUtils connectionUtils = new RedisConnectionUtils(clientSocket);
-          connectionUtils.handleConnectionRequest();
+
+          new Thread(() -> {
+              try{
+                  connectionUtils.handleConnectionRequest();
+              }
+              catch (Exception e){
+                  System.out.println("exeption" + e.getMessage());
+              }
+          }).start();
+
 
         } catch (IOException e) {
 
