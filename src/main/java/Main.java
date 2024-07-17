@@ -16,21 +16,18 @@ public class Main {
 
           serverSocket = new ServerSocket(port);
           serverSocket.setReuseAddress(true);
-          clientSocket = serverSocket.accept();
-          //for single command
-          //clientSocket.getOutputStream().write("+PONG\r\n".getBytes(StandardCharsets.UTF_8));
-          RedisConnectionUtils connectionUtils = new RedisConnectionUtils(clientSocket);
+          while(true) {
+              clientSocket = serverSocket.accept();
+              RedisConnectionUtils connectionUtils = new RedisConnectionUtils(clientSocket);
 
-          new Thread(() -> {
-              try{
-                  connectionUtils.handleConnectionRequest();
-              }
-              catch (Exception e){
-                  System.out.println("exeption" + e.getMessage());
-              }
-          }).start();
-
-
+              new Thread(() -> {
+                  try {
+                      connectionUtils.handleConnectionRequest();
+                  } catch (Exception e) {
+                      System.out.println("exeption" + e.getMessage());
+                  }
+              }).start();
+          }
         } catch (IOException e) {
 
           System.out.println("IOException: " + e.getMessage());
