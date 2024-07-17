@@ -1,10 +1,8 @@
 package utils;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.Socket;
-import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 
 public class RedisConnectionUtils {
 
@@ -17,16 +15,27 @@ public class RedisConnectionUtils {
     public void handleConnectionRequest(){
 
         try(
-                BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                OutputStream outputSteam = clientSocket.getOutputStream())
+
+                BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(clientSocket.getInputStream(), StandardCharsets.UTF_8)
+                );
+
+                BufferedWriter writer = new BufferedWriter( new OutputStreamWriter(
+                        clientSocket.getOutputStream(), StandardCharsets.UTF_8
+                ));
+        )
+
         {
             String line;
 
             while((line = reader.readLine()) != null){
                 System.out.println(line);
                 if(line.equals("ping".equalsIgnoreCase(line))){
-                    outputSteam.write("+PONG\r\n".getBytes());
-                    outputSteam.flush();
+                    writer.write("+PONG\r\n");
+                    writer.flush();
+                }
+                else if("eof".equalsIgnoreCase(line)){
+                    System.out.println("Client issues EOF");
                 }
             }
         }
