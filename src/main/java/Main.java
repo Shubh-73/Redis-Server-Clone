@@ -3,6 +3,7 @@ import utils.RedisConnectionUtils;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 public class Main {
   public static void main(String[] args){
@@ -16,6 +17,8 @@ public class Main {
           serverSocket = new ServerSocket(port);
           serverSocket.setReuseAddress(true);
           clientSocket = serverSocket.accept();
+          //for single command
+          //clientSocket.getOutputStream().write("+PONG\r\n".getBytes(StandardCharsets.UTF_8));
           RedisConnectionUtils connectionUtils = new RedisConnectionUtils(clientSocket);
           connectionUtils.handleConnectionRequest();
 
@@ -25,8 +28,8 @@ public class Main {
 
         } finally {
           try {
-            if (serverSocket != null) {
-              serverSocket.close();
+            if (clientSocket != null) {
+              clientSocket.close();
             }
           } catch (IOException e) {
             System.out.println("IOException: " + e.getMessage());
