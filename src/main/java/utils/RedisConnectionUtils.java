@@ -27,7 +27,7 @@ public class RedisConnectionUtils {
                     outputSteam.write("+PONG\r\n".getBytes());
                 }
                 else{
-                    outputSteam.write("unknown command\r\n".getBytes());
+                    outputSteam.write("--err unknown command\r\n".getBytes());
                     outputSteam.flush();
                 }
             }
