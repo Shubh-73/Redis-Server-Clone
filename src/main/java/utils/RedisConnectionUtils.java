@@ -34,6 +34,12 @@ public class RedisConnectionUtils {
                     writer.write("+PONG\r\n");
                     writer.flush();
                 }
+                else if("echo".equalsIgnoreCase(line)){
+                    String message = reader.readLine();
+                    clientSocket.getOutputStream().write(
+                            String.format("$%d\r\n%s\r\n", message.length(), message).getBytes()
+                    );
+                }
                 else if("eof".equalsIgnoreCase(line)){
                     System.out.println("eof");
                 }
