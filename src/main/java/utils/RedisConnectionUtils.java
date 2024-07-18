@@ -35,10 +35,15 @@ public class RedisConnectionUtils {
                     writer.flush();
                 }
                 else if("echo".equalsIgnoreCase(line)){
-                    String message = reader.readLine();
-                    clientSocket.getOutputStream().write(
-                            String.format("$%d\r\n", message.length(), message).getBytes()
-                    );
+                    String[] parts = line.split(" ",2);
+                    if(parts.length >1){
+                        String message = parts[1];
+                        writer.write(String.format(
+                                "$%d\r\n%s\r\n", message.length(), message
+                        ));
+                        writer.flush();
+                    }
+
                 }
                 else if("eof".equalsIgnoreCase(line)){
                     System.out.println("eof");
