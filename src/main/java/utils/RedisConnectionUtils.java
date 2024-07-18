@@ -34,16 +34,17 @@ public class RedisConnectionUtils {
                     writer.write("+PONG\r\n");
                     writer.flush();
                 }
-                else if("echo".equalsIgnoreCase(line)){
-                    String[] parts = line.split(" ",2);
-                    if(parts.length >1){
-                        String message = parts[1];
-                        writer.write(String.format(
-                                "$%d\r\n%s\r\n", message.length(), message
-                        ));
-                        writer.flush();
-                    }
+                else if(line.startsWith("*")){
+                    int numberOfElement = Integer.parseInt(line.substring(1));
 
+                    line = reader.readLine();
+                    line = reader.readLine();
+                    line = reader.readLine();
+                    line = reader.readLine();
+
+                    String message = line;
+                    writer.write(String.format("$%d\r\n%s\r\n", message.length(), message));
+                    writer.flush();
                 }
                 else if("eof".equalsIgnoreCase(line)){
                     System.out.println("eof");
