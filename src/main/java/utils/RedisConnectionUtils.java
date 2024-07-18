@@ -37,7 +37,7 @@ public class RedisConnectionUtils {
                 else if("echo".equalsIgnoreCase(line)){
                     String message = reader.readLine();
                     clientSocket.getOutputStream().write(
-                            String.format("$%d\r\n%s\r\n", message.length(), message).getBytes()
+                            String.format("$%d\r\n", message.length(), message).getBytes()
                     );
                 }
                 else if("eof".equalsIgnoreCase(line)){
